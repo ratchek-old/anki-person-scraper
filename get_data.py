@@ -1,6 +1,8 @@
 import wikipedia
 from bs4 import BeautifulSoup
 import requests
+from my_exception import *
+ 
 
 IMGS_LOCATION ="/home/tomek/TOMEK/0-new/anki bio project/imgs/"
 
@@ -9,11 +11,11 @@ def get_info(name):
 	soup = BeautifulSoup(page.html(), 'lxml')
 	vbox =  soup.find('table', {'class':'infobox'})
 	if not vbox:
-		raise Exception("{} does not have a vbox on his wiki page".format(name))	
+		raise noVboxError("{} does not have a vbox on his wiki page".format(name))
 	img_source = "https:" + vbox.findAll('img')[0]['src']
 	info = page.summary.split("\n")[0]
 	full_name = page.title
-	
+
 	return (full_name, img_source, info)
 
 def download_pic(url):
@@ -23,5 +25,3 @@ def download_pic(url):
 	file.write(response.content)
 	file.close()
 	return name
-
-

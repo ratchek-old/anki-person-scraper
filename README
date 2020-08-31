@@ -1,1 +1,5 @@
 A program that generates anki decks from lists of people. The decks contain a name, a picture, and basic info. Used to train myself to be better at remembering people's faces. 
+
+
+Uses genanki (a github library)
+https://github.com/kerrickstaley/genanki

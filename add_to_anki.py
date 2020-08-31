@@ -16,8 +16,9 @@ def create_note(name):
 		img_name = download_pic(info[1])
 		my_note = genanki.Note(
   			model=FACES_MODEL,
-  			fields=[img_name, info[0], info[2]]
+  			fields=['<img src="{}">'.format(img_name), info[0], info[2]]
 			)
+		IMGS.append("{}/{}".format(IMGS_LOCATION, img_name))
 
 	return my_note
 
@@ -43,6 +44,7 @@ def create_model():
 
 FACES_MODEL = create_model()
 SKIPPED = []
+IMGS = []
 
 my_deck = genanki.Deck(
   2059400109,
@@ -59,4 +61,6 @@ for person in ["donald trump", "kosciuszko", "obama", "chopin", "marie curie"]:
 print ("Skipped = {}".format(SKIPPED))
 
 print ("Writing to file")
-genanki.Package(my_deck).write_to_file('output.apkg')
+my_package = genanki.Package(my_deck)
+my_package.media_files = IMGS
+my_package.write_to_file('output.apkg')

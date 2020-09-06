@@ -10,7 +10,7 @@ def create_note(name):
 
 	try:
 		info = get_info(name)
-	except noVboxError:
+	except (noVboxError, noPicError, wikipedia.exceptions.WikipediaException) as e:
 		SKIPPED.append(name)
 	else:
 		img_name = download_pic(info[1])
@@ -45,18 +45,24 @@ def create_model():
 FACES_MODEL = create_model()
 SKIPPED = []
 IMGS = []
+SEARCHED = []
 
 my_deck = genanki.Deck(
   2059400109,
   'Faces')
+notes = set()
+people = [line.rstrip('\n') for line in open("names")]
 
-
-for person in ["donald trump", "kosciuszko", "obama", "chopin", "marie curie"]:
+for person in people:
 	print("Scraping", person)
 	note = create_note(person)
 	if note:
 		print("Adding note for", person)
-		my_deck.add_note(note)
+		notes.add(note)
+
+for note in notes:
+	my_deck.add_note(note)
+
 
 print ("Skipped = {}".format(SKIPPED))
 
